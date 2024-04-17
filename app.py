@@ -1,101 +1,198 @@
+# # Importing necessary modules for HTML generation
+# from flask import Flask, render_template, request
+
+# app = Flask(__name__)
+
+# # Initialize game variables
+# arr = [[0 for _ in range(10)] for _ in range(10)]
+
+# # Function to check if placing a ship is possible
+# def Putable(row, col, dir, length):
+#     if dir == "竖":
+#         if row + length > 10:
+#             return False
+#         for i in range(row, row + length):
+#             if arr[i][col] != 0:
+#                 return False
+#         return True
+
+#     if dir == "横":
+#         if col + length > 10:
+#             return False
+#         for i in range(col, col + length):
+#             if arr[row][i] != 0:
+#                 return False
+#         return True
+
+# # Function to place a ship on the board
+# def place_ship(row, col, dir, length):
+#     if Putable(row, col, dir, length):
+#         if dir == "竖":
+#             for i in range(row, row + length):
+#                 arr[i][col] = "H"
+#         if dir == "横":
+#             for i in range(col, col + length):
+#                 arr[row][i] = "H"
+
+# # Function to place a miss on the board
+# def place_miss(row, col):
+#     arr[row][col] = "M"
+
+# # Function to generate a probability map
+# def prob_map(length):
+#     map1 = [[0 for _ in range(10)] for _ in range(10)]
+#     for i in range(10):
+#         for j in range(10):
+#             if Putable(i, j, "横", length):
+#                 for k in range(length):
+#                     map1[i][j + k] += 1
+#             if Putable(i, j, "竖", length):
+#                 for k in range(length):
+#                     map1[i + k][j] += 1
+#     return map1
+
+# # Function to find the maximum number in the probability map
+# def max_num(map):
+#     max_num = 0
+#     x, y = 0, 0
+#     for i in range(10):
+#         for j in range(10):
+#             if map[i][j] > max_num:
+#                 max_num = map[i][j]
+#                 x, y = j + 1, i + 1
+#     return x, y
+
+# # Route for the main page
+# @app.route('/', methods=['GET', 'POST'])
+# def game():
+#     if request.method == 'POST':
+#         if 'comp_length' in request.form:
+#             # Special case: Find provable hit
+#             length = int(request.form['comp_length'])
+#             prob_map1 = prob_map(length)
+#             x, y = max_num(prob_map1)
+#             return render_template('index.html', arr=arr, max_x=x, max_y=y)
+#         else:
+#             # Regular case: Player's turn
+#             userx = int(request.form['x'])
+#             usery = int(request.form['y'])
+#             direction = request.form['direction']
+#             length = int(request.form['length'])
+
+#             # Place ship or miss based on user input
+#             if direction == "横":
+#                 place_ship(usery - 1, userx - 1, direction, length)
+#             elif direction == "竖":
+#                 place_ship(usery - 1, userx - 1, direction, length)
+#             else:
+#                 place_miss(usery - 1, userx - 1)
+
+#     return render_template('index.html', arr=arr, max_x=None, max_y=None)
+
+# # Route to stop the game
+# @app.route('/stop', methods=['POST'])
+# def stop_game():
+#     # Perform any necessary cleanup or actions to stop the game
+#     return "Game stopped."
+
+# if __name__ == '__main__':
+#     app.run(debug=True)
+
+from flask import Flask, render_template, request
+
+app = Flask(__name__)
+
+# Initialize game variables
 arr = [[0 for _ in range(10)] for _ in range(10)]
-def Putable(row, col, dir, len):
-    #Out of bound
-    if dir=="竖":
-        if row+len>10:
-            #print("out of bound"+str(col)+str(row))
+
+# Function to check if placing a ship is possible
+def Putable(row, col, dir, length):
+    if dir == "竖":
+        if row + length > 10:
             return False
-        i=row
-        while i<len+row:
-            if arr[i][col]!=0:
-                #print("repeat"+str(col)+str(row))
+        for i in range(row, row + length):
+            if arr[i][col] != 0:
                 return False
-            i += 1
         return True
 
-
-    if dir=="横":
-        if col+len>10:
-            #print("out of bound"+str(col)+str(row))
+    if dir == "横":
+        if col + length > 10:
             return False
-        i=col
-        while i<len+col:
-            if arr[row][i]!=0:
-                #print("Repeat"+str(col)+str(row))
+        for i in range(col, col + length):
+            if arr[row][i] != 0:
                 return False
-            i += 1
-    return True
-def put_Miss(row, col, dir, len):
-    if Putable(row, col, dir, len):
-        if dir=="竖":
-            i = row
-            while i < len + row:
-                arr[i][col]="M"
-                i+=1
-        if dir=="横":
-            i=col
-            while i<len+col:
-                arr[row][i]="M"
-                i+=1
-def put(row, col, dir, len):
-    if Putable(row, col, dir, len):
-        if dir=="竖":
-            i = row
-            while i < len + row:
-                arr[i][col]="H"
-                i+=1
-        if dir=="横":
-            i=col
-            while i<len+col:
-                arr[row][i]="H"
-                i+=1
-def put1(row, col, dir, len, map):
-    if Putable(row, col, dir, len):
-        if dir=="竖":
-            i=row
-            while i < len + row:
-                map[i][col]+=1
-                i+=1
-        if dir=="横":
-            i=col
-            while i<len+col:
-                map[row][i]+=1
-                i+=1
+        return True
 
+# Function to place a ship on the board
+def place_ship(row, col, dir, length):
+    if Putable(row, col, dir, length):
+        if dir == "竖":
+            for i in range(row, row + length):
+                arr[i][col] = "H"
+        if dir == "横":
+            for i in range(col, col + length):
+                arr[row][i] = "H"
 
+# Function to place a miss on the board
+def place_miss(row, col):
+    arr[row][col] = "M"
 
+# Function to generate a probability map
 def prob_map(length):
-    map1=[[0 for _ in range(10)] for _ in range(10)]
-    for i in range(0,10):
-        for j in range(0,10):
-            if Putable(i,j,"横",length):
-                put1(i,j,"横",length,map1)
-            if Putable(i,j,"竖",length):
-                put1(i,j,"竖",length,map1)
-    for i in range(10):
-        print(map1[i])
-    return map1
-
-def maxnum(map):
-    max_num=0
-    x=0
-    y=0
+    map1 = [[0 for _ in range(10)] for _ in range(10)]
     for i in range(10):
         for j in range(10):
-            if map[i][j]>max_num:
-                max_num=map[i][j]
-                x=j+1
-                y=i+1
-    print("x:"+str(x))
-    print("y:"+str(y))
-userx=0
-while userx!=99:
-    userx=int(input("your first shot, x-axis, press 99 if you want to quit, press 999 if you need help"))
-    if userx==999:
-        length_of=int(input("The length of your target ship?"))
-        maxnum(prob_map(length_of))
-        continue
-    usery=int(input("your first shot, y-axis"))
-    put(usery-1,userx-1, "竖", 1)
+            if Putable(i, j, "横", length):
+                for k in range(length):
+                    map1[i][j + k] += 1
+            if Putable(i, j, "竖", length):
+                for k in range(length):
+                    map1[i + k][j] += 1
+    return map1
+
+# Function to find the maximum number in the probability map
+def max_num(map):
+    max_num = 0
+    x, y = 0, 0
     for i in range(10):
-        print(arr[i])
+        for j in range(10):
+            if map[i][j] > max_num:
+                max_num = map[i][j]
+                x, y = j + 1, i + 1
+    return x, y
+
+@app.route('/', methods=['GET', 'POST'])
+def game():
+    if request.method == 'POST':
+        if 'comp_length' in request.form:
+            # Special case: Find provable hit
+            length = int(request.form['comp_length'])
+            prob_map1 = prob_map(length)
+            x, y = max_num(prob_map1)
+            return render_template('index.html', arr=arr, max_x=x, max_y=y,prob_map1=prob_map1)
+        else:
+            # Regular case: Player's turn
+            userx = int(request.form['x'])
+            usery = int(request.form['y'])
+            direction = request.form['direction']
+            length = int(request.form['length'])
+
+            # Place ship or miss based on user input
+            if direction == "横":
+                place_ship(usery - 1, userx - 1, direction, length)
+            elif direction == "竖":
+                place_ship(usery - 1, userx - 1, direction, length)
+            else:
+                place_miss(usery - 1, userx - 1)
+
+    return render_template('index.html', arr=arr, max_x=None, max_y=None)
+
+# Route to stop the game
+@app.route('/stop', methods=['POST'])
+def stop_game():
+    # Perform any necessary cleanup or actions to stop the game
+    return "Game stopped."
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
