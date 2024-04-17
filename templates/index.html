@@ -62,42 +62,22 @@
       <button type="submit">Hit</button>
     </form>
 
-    <!-- Provable Hit Section -->
-    <!-- <h2>Provable Hit</h2>
+    <h2>Provable Hit</h2>
     {% if max_x and max_y %}
     <p>Provable Hit Coordinates: ({{ max_x }}, {{ max_y }})</p>
+    <!-- Draw grid based on prob_map1 -->
     <table>
       {% for row_num in range(10) %}
       <tr>
-        {% for col_num in range(10) %} {% if row_num + 1 == max_y and col_num +
-        1 == max_x %}
-        <td style="background-color: yellow">{{ arr[row_num][col_num] }}</td>
-        {% else %}
-        <td>{{ arr[row_num][col_num] }}</td>
-        {% endif %} {% endfor %}
+        {% for col_num in range(10) %}
+        <td>{{ prob_map1[row_num][col_num] }}</td>
+        {% endfor %}
       </tr>
       {% endfor %}
     </table>
     {% else %}
     <p>No provable hit available.</p>
-    {% endif %} -->
-
-    <h2>Provable Hit</h2>
-{% if max_x and max_y %}
-<p>Provable Hit Coordinates: ({{ max_x }}, {{ max_y }})</p>
-<!-- Draw grid based on prob_map1 -->
-<table>
-  {% for row_num in range(10) %}
-  <tr>
-    {% for col_num in range(10) %}
-    <td>{{ prob_map1[row_num][col_num] }}</td>
-    {% endfor %}
-  </tr>
-  {% endfor %}
-</table>
-{% else %}
-<p>No provable hit available.</p>
-{% endif %}
+    {% endif %}
 
     <!-- Stop Game Button -->
     <form action="/stop" method="post">
