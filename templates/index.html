@@ -1,87 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Battleship Game</title>
-    <style>
-      /* Add your CSS styling here */
-    </style>
-  </head>
-  <body>
-    <h1>Battleship Game</h1>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Battleship</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      padding-top: 50px;
+    }
+    .form-group {
+      margin-bottom: 25px;
+    }
+    .btn-block {
+      margin-top: 20px;
+    }
+    .game-section {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    h1, h2, h3 {
+      color: #333;
+      text-align: center;
+    }
+    .text-center {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Battleship</h1>
 
-    <!-- Player Input Section -->
-    <h2>Player's Turn</h2>
-    <form action="/" method="post">
-      <label for="x">X Coordinate:</label>
-      <input type="number" id="x" name="x" min="1" max="10" required />
-      <label for="y">Y Coordinate:</label>
-      <input type="number" id="y" name="y" min="1" max="10" required />
-      <label for="direction">Direction:</label>
-      <select id="direction" name="direction" required>
-        <option value="横">Horizontal</option>
-        <option value="竖">Vertical</option>
-      </select>
-      <label for="length">Ship Length:</label>
-      <input
-        type="number"
-        id="length"
-        name="length"
-        min="1"
-        max="10"
-        required
-      />
-      <button type="submit">Place Ship</button>
-    </form>
+    <!-- Player's Turn and Player's Grid Section -->
+    <div class="row">
+      <div class="col-md-6">
+        <div class="game-section">
+          <h2>Player's Turn</h2>
+          <form action="/" method="post">
+            <div class="form-group">
+              <label for="x">X Coordinate:</label>
+              <input type="number" id="x" name="x" class="form-control" min="1" max="10" required>
+            </div>
+            <div class="form-group">
+              <label for="y">Y Coordinate:</label>
+              <input type="number" id="y" name="y" class="form-control" min="1" max="10" required>
+            </div>
+            <div class="form-group">
+              <label for="direction">Direction:</label>
+              <select id="direction" name="direction" class="form-control" required>
+                <option value="horizontal">Horizontal</option>
+                <option value="vertical">Vertical</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="length">Ship Length:</label>
+              <input type="number" id="length" name="length" class="form-control" min="1" max="10" value="1" >
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Place Ship</button>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="game-section">
+          <h2>Player's Grid</h2>
+          <table class="table">
+            {% for row in arr %}
+            <tr>
+              {% for cell in row %}
+              <td>{{ cell }}</td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    </div>
 
-    <!-- Player's Grid -->
-    <h2>Player's Grid</h2>
-    <table>
-      {% for row in arr %}
-      <tr>
-        {% for cell in row %}
-        <td>{{ cell }}</td>
-        {% endfor %}
-      </tr>
-      {% endfor %}
-    </table>
+    <!-- Computer Input and Provable Hit Section -->
+    <div class="row mt-5">
+      <div class="col-md-6">
+        <div class="game-section">
+          <h2>Provable Hit Input</h2>
+          <form action="/" method="post">
+            <div class="form-group">
+              <label for="comp_length">Ship Length:</label>
+              <input type="number" id="comp_length" name="comp_length" class="form-control" min="1" max="10" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Hit</button>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="game-section">
+          <h2>Provable Hit</h2>
+          {% if max_x and max_y %}
+          <p class="text-center">Provable Hit Coordinates:<b>(X: {{ max_x }} , Y: {{ max_y }})</b></p>
+          <!-- Draw grid based on prob_map1 -->
+          <table class="table">
+            {% for row_num in range(10) %}
+            <tr>
+              {% for col_num in range(10) %}
+              <td>{{ prob_map1[row_num][col_num] }}</td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </table>
+          {% else %}
+          <p class="text-center">No provable hit available.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <!-- Computer Input Section -->
-    <h2>Provable Hit input</h2>
-    <form action="/" method="post">
-      <label for="comp_length">Ship Length:</label>
-      <input
-        type="number"
-        id="comp_length"
-        name="comp_length"
-        min="1"
-        max="10"
-        required
-      />
-      <button type="submit">Hit</button>
-    </form>
-
-    <h2>Provable Hit</h2>
-    {% if max_x and max_y %}
-    <p>Provable Hit Coordinates: ({{ max_x }}, {{ max_y }})</p>
-    <!-- Draw grid based on prob_map1 -->
-    <table>
-      {% for row_num in range(10) %}
-      <tr>
-        {% for col_num in range(10) %}
-        <td>{{ prob_map1[row_num][col_num] }}</td>
-        {% endfor %}
-      </tr>
-      {% endfor %}
-    </table>
-    {% else %}
-    <p>No provable hit available.</p>
-    {% endif %}
-
-    <!-- Stop Game Button -->
-    <form action="/stop" method="post">
-      <button type="submit">Stop Game</button>
-    </form>
-  </body>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
 </html>
