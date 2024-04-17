@@ -1,6 +1,6 @@
 
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,redirect
 
 app = Flask(__name__)
 
@@ -89,11 +89,16 @@ def game():
 
     return render_template('index.html', arr=arr, max_x=None, max_y=None)
 
-# Route to stop the game
+def reset_game():
+    global arr
+    arr = [[0 for _ in range(10)] for _ in range(10)]
+    return redirect('/')
+
 @app.route('/stop', methods=['POST'])
 def stop_game():
-    # Perform any necessary cleanup or actions to stop the game
-    return "Game stopped."
+    return reset_game()
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
