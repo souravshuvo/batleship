@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Battleship Game</title>
+    <style>
+      /* Add your CSS styling here */
+    </style>
+  </head>
+  <body>
+    <h1>Battleship Game</h1>
+
+    <!-- Player Input Section -->
+    <h2>Player's Turn</h2>
+    <form action="/" method="post">
+      <label for="x">X Coordinate:</label>
+      <input type="number" id="x" name="x" min="1" max="10" required />
+      <label for="y">Y Coordinate:</label>
+      <input type="number" id="y" name="y" min="1" max="10" required />
+      <label for="direction">Direction:</label>
+      <select id="direction" name="direction" required>
+        <option value="横">Horizontal</option>
+        <option value="竖">Vertical</option>
+      </select>
+      <label for="length">Ship Length:</label>
+      <input
+        type="number"
+        id="length"
+        name="length"
+        min="1"
+        max="10"
+        required
+      />
+      <button type="submit">Place Ship</button>
+    </form>
+
+    <!-- Player's Grid -->
+    <h2>Player's Grid</h2>
+    <table>
+      {% for row in arr %}
+      <tr>
+        {% for cell in row %}
+        <td>{{ cell }}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </table>
+
+    <!-- Computer Input Section -->
+    <h2>Provable Hit input</h2>
+    <form action="/" method="post">
+      <label for="comp_length">Ship Length:</label>
+      <input
+        type="number"
+        id="comp_length"
+        name="comp_length"
+        min="1"
+        max="10"
+        required
+      />
+      <button type="submit">Hit</button>
+    </form>
+
+    <!-- Provable Hit Section -->
+    <!-- <h2>Provable Hit</h2>
+    {% if max_x and max_y %}
+    <p>Provable Hit Coordinates: ({{ max_x }}, {{ max_y }})</p>
+    <table>
+      {% for row_num in range(10) %}
+      <tr>
+        {% for col_num in range(10) %} {% if row_num + 1 == max_y and col_num +
+        1 == max_x %}
+        <td style="background-color: yellow">{{ arr[row_num][col_num] }}</td>
+        {% else %}
+        <td>{{ arr[row_num][col_num] }}</td>
+        {% endif %} {% endfor %}
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <p>No provable hit available.</p>
+    {% endif %} -->
+
+    <h2>Provable Hit</h2>
+{% if max_x and max_y %}
+<p>Provable Hit Coordinates: ({{ max_x }}, {{ max_y }})</p>
+<!-- Draw grid based on prob_map1 -->
+<table>
+  {% for row_num in range(10) %}
+  <tr>
+    {% for col_num in range(10) %}
+    <td>{{ prob_map1[row_num][col_num] }}</td>
+    {% endfor %}
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<p>No provable hit available.</p>
+{% endif %}
+
+    <!-- Stop Game Button -->
+    <form action="/stop" method="post">
+      <button type="submit">Stop Game</button>
+    </form>
+  </body>
+</html>
