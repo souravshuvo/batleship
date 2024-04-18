@@ -32,6 +32,9 @@
     .text-center {
       text-align: center;
     }
+    #directionFormGroup {
+    display: none;
+  }
   </style>
 </head>
 <body>
@@ -52,7 +55,7 @@
               <label for="y">Y Coordinate:</label>
               <input type="number" id="y" name="y" class="form-control" min="1" max="10" required>
             </div>
-            <div class="form-group">
+            <div id="directionFormGroup" class="form-group">
               <label for="direction">Direction:</label>
               <select id="direction" name="direction" class="form-control" required>
                 <option value="horizontal">Horizontal</option>
@@ -121,7 +124,7 @@
     </div>
   </div>
 
-  <!-- Stop Game Button -->
+  <!-- rest Game Button -->
 <div class="row m-5 pb-2">
     <div class="col-md-12 text-center">
       <form action="/stop" method="post">

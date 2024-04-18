@@ -65,6 +65,8 @@ def max_num(map):
 
 @app.route('/', methods=['GET', 'POST'])
 def game():
+    if request.method == 'GET':
+        reset_game()  # Reset game state when first accessing the page
     if request.method == 'POST':
         if 'comp_length' in request.form:
             # Special case: Find provable hit
