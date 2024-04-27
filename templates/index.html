@@ -1,140 +1,423 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Battleship</title>
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: #f8f9fa;
-      font-family: Arial, sans-serif;
-    }
-    .container {
-      padding-top: 50px;
-    }
-    .form-group {
-      margin-bottom: 25px;
-    }
-    .btn-block {
-      margin-top: 20px;
-    }
-    .game-section {
-      background-color: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-    h1, h2, h3 {
-      color: #333;
-      text-align: center;
-    }
-    .text-center {
-      text-align: center;
-    }
-    #directionFormGroup {
-    display: none;
-  }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Battleship</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Battleship</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        padding-top: 50px;
+      }
+      .form-group {
+        margin-bottom: 25px;
+      }
+      .btn-block {
+        margin-top: 20px;
+      }
+      .game-section {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      h1,
+      h2,
+      h3 {
+        color: #333;
+        text-align: center;
+      }
+      .text-center {
+        text-align: center;
+      }
+      #directionFormGroup {
+        display: none;
+      }
+      .hiddenlength {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="p-2">Shi Shou Ye</h1>
 
-    <!-- Player's Turn and Player's Grid Section -->
-    <div class="row">
-      <div class="col-md-6">
-        <div class="game-section">
-          <h2>Player's Turn</h2>
-          <form action="/" method="post">
-            <div class="form-group">
-              <label for="x">X Coordinate:</label>
-              <input type="number" id="x" name="x" class="form-control" min="1" max="10" required>
-            </div>
-            <div class="form-group">
-              <label for="y">Y Coordinate:</label>
-              <input type="number" id="y" name="y" class="form-control" min="1" max="10" required>
-            </div>
-            <div id="directionFormGroup" class="form-group">
-              <label for="direction">Direction:</label>
-              <select id="direction" name="direction" class="form-control" required>
-                <option value="horizontal">Horizontal</option>
-                <option value="vertical">Vertical</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="length">Ship Length:</label>
-              <input type="number" id="length" name="length" class="form-control" min="1" max="10" value="1" >
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Place Ship</button>
-          </form>
+      <!-- Player's Turn and Player's Grid Section -->
+      <div class="row">
+        <div class="col-md-6">
+          <div class="game-section">
+            <h2>Player's Turn</h2>
+            <form action="/" method="post">
+              <div class="form-group">
+                <label for="x">X Coordinate:</label>
+                <input
+                  type="number"
+                  id="x"
+                  name="x"
+                  class="form-control"
+                  min="1"
+                  max="10"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="y">Y Coordinate:</label>
+                <input
+                  type="number"
+                  id="y"
+                  name="y"
+                  class="form-control"
+                  min="1"
+                  max="10"
+                  required
+                />
+              </div>
+              <div id="directionFormGroup" class="form-group">
+                <label for="direction">Direction:</label>
+                <select
+                  id="direction"
+                  name="direction"
+                  class="form-control"
+                  required
+                >
+                  <option value="horizontal">Horizontal</option>
+                  <option value="vertical">Vertical</option>
+                </select>
+              </div>
+              <div class="form-group hiddenlength">
+                <label for="length">Ship Length:</label>
+                <input
+                  type="number"
+                  id="length"
+                  name="length"
+                  class="form-control"
+                  min="1"
+                  max="10"
+                  value="1"
+                />
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">
+                Place Ship
+              </button>
+            </form>
+          </div>
         </div>
-      </div>
-      <div class="col-md-6">
-        <div class="game-section">
-          <h2>Player's Grid</h2>
-          <table class="table">
-            {% for row in arr %}
-            <tr>
-              {% for cell in row %}
-              <td>{{ cell }}</td>
+
+        <!-- Player's Grid -->
+        <div class="col-md-6">
+          <div class="game-section">
+            <h2>Player's Grid</h2>
+            <table class="table">
+              {% for row in arr %}
+              <tr>
+                {% for cell in row %}
+                <td>{{ cell }}</td>
+                {% endfor %}
+              </tr>
               {% endfor %}
-            </tr>
-            {% endfor %}
-          </table>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Computer Input and Provable Hit Section -->
-    <div class="row mt-5">
-      <div class="col-md-6">
-        <div class="game-section">
-          <h2>Provable Hit Input</h2>
-          <form action="/" method="post">
-            <div class="form-group">
-              <label for="comp_length">Ship Length:</label>
-              <input type="number" id="comp_length" name="comp_length" class="form-control" min="1" max="10" required>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Hit</button>
-          </form>
+      <!-- Computer Input and Provable Hit Section -->
+      <div class="row">
+        <div class="col-md-6 mt-3">
+          <div class="game-section">
+            <h2>Possible Hit Input</h2>
+            <form action="/" method="post">
+              <div class="form-group">
+                <label for="comp_length">Ship Length:</label>
+                <input
+                  type="number"
+                  id="comp_length"
+                  name="comp_length"
+                  class="form-control"
+                  min="1"
+                  max="10"
+                  required
+                />
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">
+                Hit
+              </button>
+            </form>
+          </div>
         </div>
-      </div>
-      <div class="col-md-6">
-        <div class="game-section">
-          <h2>Provable Hit</h2>
-          {% if max_x and max_y %}
-          <p class="text-center">Provable Hit Coordinates:<b>(X: {{ max_x }} , Y: {{ max_y }})</b></p>
-          <!-- Draw grid based on prob_map1 -->
-          <table class="table">
-            {% for row_num in range(10) %}
-            <tr>
-              {% for col_num in range(10) %}
-              <td>{{ prob_map1[row_num][col_num] }}</td>
+
+        <div class="col-md-6 mt-3">
+          <div class="game-section">
+            <h2>Provable Hit</h2>
+            {% if max_x and max_y %}
+            <p class="text-center">
+              Provable Hit Coordinates:<b>(X: {{ max_x }} , Y: {{ max_y }})</b>
+            </p>
+            <!-- Draw grid based on prob_map1 -->
+            <table class="table">
+              {% for row_num in range(10) %}
+              <tr>
+                {% for col_num in range(10) %}
+                <td>{{ prob_map1[row_num][col_num] }}</td>
+                {% endfor %}
+              </tr>
               {% endfor %}
-            </tr>
-            {% endfor %}
-          </table>
-          {% else %}
-          <p class="text-center">No provable hit available.</p>
-          {% endif %}
+            </table>
+            {% else %}
+            <p class="text-center">No provable hit available.</p>
+            {% endif %}
+          </div>
         </div>
       </div>
 
-    </div>
-  </div>
+      <!-- Review section -->
 
-  <!-- rest Game Button -->
-<div class="row m-5 pb-2">
-    <div class="col-md-12 text-center">
-      <form action="/stop" method="post">
-        <button type="submit" class="btn btn-danger btn-lg">Reset </button>
-      </form>
-    </div>
-  </div>
+      <div class="game-section mt-5">
+        <h2>Feedback Section</h2>
+        <!-- Comment input and submit button in a row -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="commentInput">Provide Feedback:</label>
+              <textarea
+                id="commentInput"
+                name="comments"
+                class="form-control"
+                rows="4"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        <!-- Like and dislike buttons -->
+        <div class="row">
+          <div class="col-md-3">
+            <div class="form-group">
+              <button type="button" id="like" class="btn btn-link">
+                <i class="fas fa-thumbs-up"></i> Like
+              </button>
+              <span id="likeCount">{{ likes }}</span>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <button type="button" id="dislike" class="btn btn-link">
+                <i class="fas fa-thumbs-down"></i> Dislike
+              </button>
+              <span id="dislikeCount">{{ dislikes }}</span>
+            </div>
+          </div>
 
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
+          <div class="col-md-6 text-right">
+            <button type="submit" id="commentSubmit" class="btn btn-primary">
+              Save
+            </button>
+          </div>
+        </div>
+        <!-- Comments section with scroll -->
+        <h3>All Feedback</h3>
+        <div
+          class="comment-section"
+          style="max-height: 100px; overflow-y: auto"
+        >
+          <ul id="commentList">
+            {% for comment, timestamp in comments %}
+            <li>
+              <span class="timestamp">{{ timestamp }}</span><br />
+              <span>{{ comment }}</span><br />
+              <!-- Display timestamp below comment -->
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <!-- Reset Game Button -->
+        <div class="row m-5 pb-2">
+          <div class="col-md-12 text-center">
+            <form action="/stop" method="post">
+              <button type="submit" class="btn btn-danger btn-lg">Reset</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      />
+      <script>
+        document.getElementById("like").addEventListener("click", function () {
+          // Increment the like count in the UI
+          var likeCount = document.getElementById("likeCount");
+          likeCount.innerText = parseInt(likeCount.innerText) + 1;
+
+          sendReactionLike();
+        });
+
+        document
+          .getElementById("dislike")
+          .addEventListener("click", function () {
+            // Increment the dislike count in the UI
+            var dislikeCount = document.getElementById("dislikeCount");
+            dislikeCount.innerText = parseInt(dislikeCount.innerText) + 1;
+
+            // Send the dislike data to the backend
+            sendReactionDislike();
+          });
+
+        document
+          .getElementById("commentSubmit")
+          .addEventListener("click", function () {
+            // Get the comment input value inside the event listener
+            var comment = document.getElementById("commentInput").value;
+
+            // You can send the comment data to the backend using fetch or XMLHttpRequest
+            // For example, using fetch:
+            fetch("/comment", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ comment: comment }),
+            })
+              .then((response) => {
+                // Handle response as needed
+                if (response.ok) {
+                  response.json().then((data) => {
+                    var timestamp = data.timestamp;
+                    // Add the comment and timestamp to the UI
+                    var commentList = document.getElementById("commentList");
+                    var newComment = document.createElement("li");
+                    newComment.innerHTML =
+                      "<span class='timestamp'>" +
+                      timestamp +
+                      "</span><br><span>" +
+                      comment +
+                      "</span>";
+                    // Append the new comment to the list
+                    commentList.appendChild(newComment);
+                    // Clear the comment input field
+                    document.getElementById("commentInput").value = "";
+                    // Show success toast
+                    showToast("Comment saved successfully");
+                  });
+                } else {
+                  // Failed to save comment
+                  // Show error toast
+                  showToast("Failed to save comment", "error");
+                }
+              })
+              .catch((error) => {
+                console.error("Error occurred:", error);
+                // Handle any errors that occurred during the fetch
+                // Show error toast
+                showToast("Error occurred", "error");
+              });
+          });
+
+        function showToast(message, type = "success") {
+          var toastContainer = document.getElementById("toastContainer");
+          var toastId = "toast-" + Date.now();
+          var autohide = type === "error" ? false : true; // Disable autohide for error messages
+
+          var toast = `
+      <div id="${toastId}" class="toast align-items-center text-white bg-${type} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="${autohide}">
+        <div class="d-flex">
+          <div class="toast-body">
+            ${message}
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+    `;
+
+          toastContainer.innerHTML += toast;
+
+          var bootstrapToast = new bootstrap.Toast(
+            document.getElementById(toastId)
+          );
+          bootstrapToast.show();
+
+          // Remove the toast after a certain duration
+          if (autohide) {
+            setTimeout(function () {
+              document.getElementById(toastId).remove();
+            }, 5000); // 5 seconds
+          }
+        }
+
+        function sendReactionLike() {
+          // You can send the reaction data to the backend using fetch or XMLHttpRequest
+          // For example, using fetch:
+          fetch("/like", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}),
+          })
+            .then((response) => {
+              // Handle response as needed
+              if (response.ok) {
+                // Reaction data sent successfully
+                // Show success toast
+                showToast("Reaction data sent successfully");
+              } else {
+                // Failed to send reaction data
+                // Show error toast
+                showToast("Failed to send reaction data", "error");
+              }
+            })
+            .catch((error) => {
+              console.error("Error occurred:", error);
+              // Handle any errors that occurred during the fetch
+              // Show error toast
+              showToast("Error occurred", "error");
+            });
+        }
+
+        function sendReactionDislike() {
+          // You can send the reaction data to the backend using fetch or XMLHttpRequest
+          // For example, using fetch:
+          fetch("/dislike", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}),
+          })
+            .then((response) => {
+              // Handle response as needed
+              if (response.ok) {
+                // Reaction data sent successfully
+                // Show success toast
+                showToast("Reaction data sent successfully");
+              } else {
+                // Failed to send reaction data
+                // Show error toast
+                showToast("Failed to send reaction data", "error");
+              }
+            })
+            .catch((error) => {
+              console.error("Error occurred:", error);
+              // Handle any errors that occurred during the fetch
+              // Show error toast
+              showToast("Error occurred", "error");
+            });
+        }
+      </script>
+      <div
+        id="toastContainer"
+        style="position: fixed; top: 20px; right: 20px; z-index: 9999"
+      ></div>
+    </div>
+  </body>
 </html>

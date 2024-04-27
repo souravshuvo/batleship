@@ -1,0 +1,73 @@
+<div class="row">
+              <div class="col-md-9">
+                <div class="form-group">
+                  <label for="commentInput">Provide Feedback:</label>
+                  <textarea
+                    id="commentInput"
+                    name="comments"
+                    class="form-control"
+                    rows="4"
+                  ></textarea>
+                </div>
+              </div>
+              <div class="col-md-3 mt-5">
+                <button
+                  type="submit"
+                  id="commentSubmit"
+                  class="btn btn-primary btn-block"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+
+
+
+
+            document
+        .getElementById("commentSubmit")
+        .addEventListener("click", function () {
+          // Get the comment input value inside the event listener
+          var comment = document.getElementById("commentInput").value;
+          console.log(Comment);
+
+          // You can send the comment data to the backend using fetch or XMLHttpRequest
+          // For example, using fetch:
+          fetch("/comment", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ comment: comment }),
+          })
+            .then((response) => {
+              // Handle response as needed
+              if (response.ok) {
+                // Comment saved successfully
+                console.log("Comment saved successfully");
+                // You can update the UI here if needed
+              } else {
+                // Failed to save comment
+                console.error("Failed to save comment");
+                // You can display an error message to the user
+              }
+            })
+            .catch((error) => {
+              console.error("Error occurred:", error);
+              // Handle any errors that occurred during the fetch
+            });
+        });
+
+
+        AND PY CODE IS 
+
+        @app.route('/comment', methods=['POST'])
+def add_comment():
+    print('come')
+    comment = request.form['comment']
+    print(comment)
+    comments.append(comment)
+    return redirect('/') 
+
+
+    where get error 
