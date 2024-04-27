@@ -235,7 +235,7 @@ def like():
 def dislike():
     global dislikes
     dislikes += 1
-    return redirect('/')
+    return redirect('index.html')
 
 
 
@@ -243,6 +243,8 @@ def dislike():
 def reset_game():
     global arr
     arr = [[0 for _ in range(10)] for _ in range(10)]
+    return redirect('/')
+
 
 @app.route('/show', methods=['POST'])
 def show_instructions():
