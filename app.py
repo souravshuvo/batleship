@@ -106,10 +106,17 @@
 #     app.run(debug=True)
 
 
-from flask import Flask, render_template, request, redirect,jsonify
+from flask import Flask, render_template, request, redirect,jsonify,send_file
 from datetime import datetime
+import os
 
 app = Flask(__name__)
+
+# Get the directory of the current Python script
+current_dir = os.path.dirname(__file__)
+
+# Construct the full path to the PDF file
+pdf_path = os.path.join(current_dir, 'static', 'instruction.pdf')
 
 # Initialize game variables
 arr = [[0 for _ in range(10)] for _ in range(10)]
@@ -236,6 +243,15 @@ def dislike():
 def reset_game():
     global arr
     arr = [[0 for _ in range(10)] for _ in range(10)]
+
+@app.route('/show', methods=['POST'])
+def show_instructions():
+    # Construct the full path to the PDF file
+    current_dir = os.path.dirname(__file__)
+    pdf_path = os.path.join(current_dir, 'static', 'instruction.pdf')
+
+    # Return the PDF file as an attachment
+    return send_file(pdf_path, as_attachment=False)
 
 @app.route('/stop', methods=['POST'])
 def stop_game():

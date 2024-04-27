@@ -237,13 +237,17 @@
         </div>
 
         <!-- Reset Game Button -->
-        <div class="row m-5 pb-2">
-          <div class="col-md-12 text-center">
-            <form action="/stop" method="post">
-              <button type="submit" class="btn btn-danger btn-lg">Reset</button>
-            </form>
+        
+        <div class="row justify-content-end">
+          <div class="col-md-6" style="display: flex; justify-content: flex-end;">
+              <form action="/stop" method="post" style="margin-right: 30px;">
+                  <button type="submit" class="btn btn-danger btn-lg">Reset</button>
+              </form>
+              <form action="/show" method="post" target="_blank">
+                  <button type="submit" class="btn btn-primary btn-lg">Instruction</button>
+              </form>
           </div>
-        </div>
+      </div>
       </div>
 
       <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
