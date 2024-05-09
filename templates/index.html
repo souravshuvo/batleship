@@ -317,15 +317,15 @@
                       "</span>";
                     commentList.appendChild(newComment);
                     document.getElementById("commentInput").value = "";
-                    showToast("Comment saved successfully");
+                    //showToast("Comment saved successfully");
                   });
                 } else {
-                  showToast("Failed to save comment", "error");
+                  //showToast("Failed to save comment", "error");
                 }
               })
               .catch((error) => {
                 //console.error("Error occurred:", error);
-                showToast("Error occurred", "error");
+                //showToast("Error occurred", "error");
               });
           });
 
@@ -375,11 +375,11 @@
               if (response.ok) {
                 // Reaction data sent successfully
                 // Show success toast
-                showToast("Reaction data sent successfully");
+                //showToast("Reaction data sent successfully");
               } else {
                 // Failed to send reaction data
                 // Show error toast
-                showToast("Failed to send reaction data", "error");
+                //showToast("Failed to send reaction data", "error");
               }
             })
             .catch((error) => {
@@ -405,18 +405,18 @@
               if (response.ok) {
                 // Reaction data sent successfully
                 // Show success toast
-                showToast("Reaction data sent successfully");
+                //showToast("Reaction data sent successfully");
               } else {
                 // Failed to send reaction data
                 // Show error toast
-                showToast("Failed to send reaction data", "error");
+                //showToast("Failed to send reaction data", "error");
               }
             })
             .catch((error) => {
-              console.error("Error occurred:", error);
+              //console.error("Error occurred:", error);
               // Handle any errors that occurred during the fetch
               // Show error toast
-              showToast("Error occurred", "error");
+              //showToast("Error occurred", "error");
             });
         }
       </script>
