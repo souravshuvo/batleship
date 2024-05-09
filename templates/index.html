@@ -213,7 +213,15 @@
             </div>
           </div>
 
-          <div class="col-md-6 text-right">
+          <div class="col-md-3">
+            <div class="form-group">
+              <i class="fa fa-eye" aria-hidden="true"></i> Access Count (<strong
+                ><span id="access">{{ access }}</span></strong
+              >)
+            </div>
+          </div>
+
+          <div class="col-md-3 text-right">
             <button type="submit" id="commentSubmit" class="btn btn-primary">
               Save
             </button>
@@ -223,13 +231,14 @@
         <h3>All Feedback</h3>
         <div
           class="comment-section"
-          style="max-height: 100px; overflow-y: auto"
+          style="max-height: 150px; overflow-y: auto"
         >
           <ul id="commentList">
-            {% for comment, timestamp in comments %}
+            {% for comment in comments %}
             <li>
-              <span class="timestamp">{{ timestamp }}</span><br />
-              <span>{{ comment }}</span><br />
+              <span class="timestamp">{{ comment['localDateTime'] }}</span
+              ><br />
+              <strong><span>{{ comment['review'] }}</span></strong><br />
               <!-- Display timestamp below comment -->
             </li>
             {% endfor %}
@@ -237,17 +246,22 @@
         </div>
 
         <!-- Reset Game Button -->
-        
+
         <div class="row justify-content-end">
-          <div class="col-md-6" style="display: flex; justify-content: flex-end;">
-              <form action="/stop" method="post" style="margin-right: 30px;">
-                  <button type="submit" class="btn btn-danger btn-lg">Reset</button>
-              </form>
-              <form action="/show" method="post" target="_blank">
-                  <button type="submit" class="btn btn-primary btn-lg">Instruction</button>
-              </form>
+          <div
+            class="col-md-6"
+            style="display: flex; justify-content: flex-end"
+          >
+            <form action="/stop" method="post" style="margin-right: 30px">
+              <button type="submit" class="btn btn-danger btn-lg">Reset</button>
+            </form>
+            <form action="/show" method="post" target="_blank">
+              <button type="submit" class="btn btn-primary btn-lg">
+                Instruction
+              </button>
+            </form>
           </div>
-      </div>
+        </div>
       </div>
 
       <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -280,11 +294,8 @@
         document
           .getElementById("commentSubmit")
           .addEventListener("click", function () {
-            // Get the comment input value inside the event listener
             var comment = document.getElementById("commentInput").value;
 
-            // You can send the comment data to the backend using fetch or XMLHttpRequest
-            // For example, using fetch:
             fetch("/comment", {
               method: "POST",
               headers: {
@@ -293,11 +304,9 @@
               body: JSON.stringify({ comment: comment }),
             })
               .then((response) => {
-                // Handle response as needed
                 if (response.ok) {
                   response.json().then((data) => {
-                    var timestamp = data.timestamp;
-                    // Add the comment and timestamp to the UI
+                    var timestamp = data.timestamp; // Here you're trying to get the timestamp from the response
                     var commentList = document.getElementById("commentList");
                     var newComment = document.createElement("li");
                     newComment.innerHTML =
@@ -306,23 +315,16 @@
                       "</span><br><span>" +
                       comment +
                       "</span>";
-                    // Append the new comment to the list
                     commentList.appendChild(newComment);
-                    // Clear the comment input field
                     document.getElementById("commentInput").value = "";
-                    // Show success toast
                     showToast("Comment saved successfully");
                   });
                 } else {
-                  // Failed to save comment
-                  // Show error toast
                   showToast("Failed to save comment", "error");
                 }
               })
               .catch((error) => {
                 console.error("Error occurred:", error);
-                // Handle any errors that occurred during the fetch
-                // Show error toast
                 showToast("Error occurred", "error");
               });
           });
