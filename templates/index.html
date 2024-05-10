@@ -309,14 +309,7 @@
                     var timestamp = data.timestamp; // Here you're trying to get the timestamp from the response
                     var commentList = document.getElementById("commentList");
                     var newComment = document.createElement("li");
-                    newComment.innerHTML =
-                      // "<span class='timestamp'>" 
-                      // +
-                      // timestamp +
-                      // "</span><br>
-                      <span>" +
-                      comment +
-                      "</span>";
+                    newComment.innerHTML = "<span>" + comment + "</span>";
                     commentList.appendChild(newComment);
                     document.getElementById("commentInput").value = "";
                     //showToast("Comment saved successfully");
